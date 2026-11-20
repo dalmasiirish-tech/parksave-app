@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #fbf4ee;
+  --color-linen: #f6ebe1;
+  --color-sand: #efdccd;
+  --color-nude: #e2c6b1;
+  --color-peach: #f6b392;
+  --color-peach-soft: #fbd7c3;
+  --color-peach-deep: #ec9471;
+  --color-clay: #b97959;
+  --color-brown: #7a5240;
+  --color-cocoa: #5a3c2f;
+  --color-espresso: #3a2820;
+  --color-ink: #2a1d17;
+  --color-sage: #7f8b63;
+  --color-rose: #c4574a;
+
+  --shadow-soft: 0 1px 2px rgb(58 40 32 / 0.06), 0 8px 24px -8px rgb(58 40 32 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(58 40 32 / 0.08), 0 22px 44px -16px rgb(58 40 32 / 0.35);
+
+  --animate-rise: rise 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-sheet: sheet 0.38s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  --animate-fade: fade 0.25s ease-out both;
+  --animate-ripple: ripple 2.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes sheet {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes ripple {
+    0% { transform: scale(0.92); opacity: 0.55; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    background: var(--color-cream);
+  }
+  body {
+    @apply font-sans text-espresso antialiased;
+    min-height: 100dvh;
+    background:
+      radial-gradient(120% 60% at 100% 0%, rgb(246 179 146 / 0.28), transparent 60%),
+      radial-gradient(90% 50% at 0% 100%, rgb(226 198 177 / 0.45), transparent 65%),
+      var(--color-cream);
+    background-attachment: fixed;
+  }
+  /* Fine paper grain, fixed so it never repaints while scrolling. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-peach-deep);
+    outline-offset: 3px;
+  }
+  button {
+    cursor: pointer;
+  }
+  input,
+  textarea {
+    font-size: 17px; /* prevents iOS zoom on focus */
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+@utility safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.75rem);
+}
+
+/* Painted parking-bay lines used behind the big save button. */
+@utility bay-lines {
+  background-image:
+    repeating-linear-gradient(-45deg, rgb(122 82 64 / 0.09) 0 10px, transparent 10px 22px);
+}

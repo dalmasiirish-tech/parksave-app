@@ -1,0 +1,10 @@
+{
+  "name": "ParkSave",
+  "short_name": "ParkSave",
+  "description": "Save your parking spot and find your car again.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF4EE",
+  "theme_color": "#FBF4EE",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
