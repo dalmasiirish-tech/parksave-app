@@ -5,84 +5,211 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ParkSave — Where did I park?</title>
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;background:#F6F1E7;font-family:Georgia,serif;color:#2b2b2b}
-  .top{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;max-width:600px;margin:0 auto}
-  .top b{font-size:24px}
-  .install{border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px;font-family:Arial}
-  .hero{max-width:520px;margin:10px auto;padding:0 22px;padding-bottom:120px}
-  .hero h1{font-size:44px;line-height:1.05;margin:15px 0;font-weight:400}
-  .hero p{font-family:Arial;color:#666;line-height:1.5;font-size:15px}
-  .circle-wrap{display:flex;justify-content:center;margin:30px 0}
-  .big-btn{width:240px;height:240px;border-radius:50%;background:#F2D8D0;border:none;cursor:pointer;box-shadow:0 12px 0 #E8CFC8, 0 18px 25px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-  .big-btn:active{transform:translateY(6px)}
-  .big-btn span{font-size:48px;background:#2b2b2b;color:white;width:62px;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:Arial;font-weight:bold}
-  .big-btn b{font-size:23px;line-height:1.1}
-  .inputs{display:flex;gap:10px}
-  .inputs input{flex:1;padding:14px;border:1px solid #ddd;border-radius:12px;background:white;font-family:Arial}
-  .card{background:white;border-radius:16px;padding:16px;margin:14px 0;font-family:Arial}
-  .card small{color:#888}
-  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#4A4A52;border-radius:30px;padding:6px;display:flex;gap:5px;width:340px;max-width:90%}
-  .nav button{flex:1;border:none;padding:13px;border-radius:25px;cursor:pointer;font-weight:bold;background:transparent;color:white;font-family:Arial}
-  .nav button.active{background:white;color:#333}
-  #msg{text-align:center;font-family:Arial;font-weight:bold;color:#2b7a2b}
-  .del{background:#ff5252;color:white;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;margin-top:8px}
+*{box-sizing:border-box} body{margin:0;background:#F6F1E7;font-family:Georgia,serif;color:#2B2B2B}
+.wrap{max-width:520px;margin:0 auto;padding:18px 20px 120px}
+.top{display:flex;gap:12px;align-items:center}
+.logo{width:44px;height:44px;background:#3A2B2B;color:#E8CFC8;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold}
+.top b{font-size:24px;display:block;line-height:1}
+.top small{font-family:Arial;color:#666;font-size:13px}
+.card{background:#FFFDF8;border-radius:22px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.05);margin-top:18px}
+.label{font-family:Arial;font-size:11px;letter-spacing:2px;color:#777}
+h1{font-size:32px;margin:6px 0 16px;font-weight:400}
+h1.big{font-size:44px;line-height:1.05}
+h1.big i{font-weight:400}
+p{font-family:Arial;color:#666;line-height:1.5;font-size:14px}
+.row{display:flex;gap:12px}
+.mini{flex:1;border:1.5px dashed #CCC;border-radius:16px;padding:14px;cursor:pointer;background:#FFFDF8}
+.mini b{font-family:Arial;font-size:11px;letter-spacing:1px;color:#777;font-weight:400}
+.mini div{font-family:Arial;font-weight:bold;margin-top:18px}
+.mini span{font-weight:400;color:#111}
+.edit{border:none;background:#EDE8DD;border-radius:20px;padding:9px 14px;cursor:pointer;font-weight:bold}
+.timer{font-size:52px;letter-spacing:-1px;line-height:1}
+.timer small{font-size:11px;letter-spacing:2px;color:#888;font-family:Arial;display:block;margin-top:4px}
+.timer-wrap{display:flex;gap:18px}
+.timer-wrap div{text-align:center}
+.timer-wrap span{font-size:11px;letter-spacing:2px;color:#888;font-family:Arial}
+.big-btn{width:240px;height:240px;border-radius:50%;background:#F2D8D0;border:none;cursor:pointer;box-shadow:0 12px 0 #E8CFC8,0 18px 25px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin:28px auto}
+.big-btn span{font-size:46px;background:#2B2B2B;color:white;width:62px;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:Arial;font-weight:bold}
+.big-btn b{font-size:23px;line-height:1.1}
+.btn{width:100%;padding:16px;border-radius:16px;border:none;font-weight:bold;cursor:pointer;font-family:Arial;font-size:15px}
+.btn-dark{background:#3A2E33;color:white}
+.btn-light{background:white;border:1.5px solid #DDD}
+.btn-gray{background:#4A4A52;color:white}
+.nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#4A4A52;border-radius:30px;padding:6px;display:flex;gap:5px;width:340px;max-width:90%;z-index:10}
+.nav button{flex:1;border:none;padding:13px;border-radius:25px;cursor:pointer;font-weight:bold;background:transparent;color:white;font-family:Arial}
+.nav button.active{background:white;color:#333}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.open{display:flex}
+.sheet{background:#FFFDF8;width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:26px 26px 0 0;padding:20px 20px 24px}
+.sheet input,.sheet textarea{width:100%;padding:14px;border:1px solid #EEE;border-radius:14px;background:#FFFEFA;font-size:15px;font-family:Arial;margin:8px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 14px}
+.grid button{padding:12px;border:1.5px solid #EEE;background:white;border-radius:10px;cursor:pointer;font-family:Arial;font-weight:bold}
+.grid button.sel{background:#2B2B2B;color:white}
+.photo-row{display:flex;gap:10px}
+.photo-row label{flex:1;border:1.5px dashed #DDD;border-radius:14px;padding:16px;text-align:center;font-family:Arial;cursor:pointer;background:white}
+.toast{background:#6B5A5A;color:white;padding:10px 14px;border-radius:12px;font-family:Arial;font-size:14px;display:none;margin-top:12px}
+.hist-card{background:white;border-radius:16px;padding:16px;margin:10px 0;font-family:Arial}
+.empty{border:1.5px dashed #CCC;border-radius:20px;padding:28px;text-align:center;margin-top:14px}
 </style>
 </head>
 <body>
-<div class="top"><b>ParkSave</b><div class="install">⤓ Install</div></div>
-<div class="hero" id="parkPage">
-  <h1>Just parked?<br><i>One tap, tapos na.</i></h1>
+<div class="wrap">
+<div class="top"><div class="logo">P</div><div><b>ParkSave</b><small id="greet">Magandang hapon!</small></div></div>
+
+<!-- NO CAR YET -->
+<div id="noCar">
+  <h1 class="big">Just parked?<br><i>One tap, tapos na.</i></h1>
   <p>We'll lock in your location and time. Add the level, slot, or a photo of the pillar if you like.</p>
-  <div class="circle-wrap">
-    <button class="big-btn" onclick="saveSpot()"><span>P</span><b>Save My<br>Parking Spot</b></button>
-  </div>
-  <div class="inputs">
-    <input id="level" placeholder="Level e.g. B2">
-    <input id="slot" placeholder="Slot e.g. A-12">
-  </div>
-  <p id="msg"></p>
-  <div id="current"></div>
+  <button class="big-btn" onclick="startPark()"><span>P</span><b>Save My<br>Parking Spot</b></button>
 </div>
-<div class="hero" id="historyPage" style="display:none">
-  <h1 style="font-size:32px">History</h1>
-  <p>Your saved parking spots.</p>
-  <div id="list"></div>
+
+<!-- MY CAR -->
+<div id="myCar" style="display:none">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div><div class="label">WHERE DID I PARK?</div><h1>Your car is here</h1></div>
+      <button class="edit" onclick="openEdit()">✎ Edit</button>
+    </div>
+    <div class="row">
+      <div class="mini" onclick="openEdit()"><b>LEVEL</b><div id="showLevel">+ Add level</div></div>
+      <div class="mini" onclick="openEdit()"><b>SLOT</b><div id="showSlot">+ Add slot</div></div>
+    </div>
+    <div style="margin-top:22px"><div class="label">PARKED FOR</div>
+      <div class="timer-wrap" style="margin-top:8px">
+        <div><div class="timer" id="tH">00</div><span>HOURS</span></div>
+        <div class="timer">:</div>
+        <div><div class="timer" id="tM">00</div><span>MINS</span></div>
+        <div class="timer">:</div>
+        <div><div class="timer" id="tS">00</div><span>SECS</span></div>
+      </div>
+      <p id="sinceText">Since 3:17 PM · Today</p>
+      <p style="color:#888">📍 GPS saved &nbsp;±198m</p>
+    </div>
+    <div id="toast" class="toast">✓ Details saved</div>
+    <div id="noteShow" style="font-family:Arial;font-size:14px;color:#555"></div>
+    <img id="photoShow" style="width:100%;border-radius:14px;margin-top:10px;display:none">
+  </div>
+  <button class="btn btn-dark" style="margin-top:14px" onclick="findCar()">➤ Find My Car</button>
+  <button class="btn btn-light" style="margin-top:10px" onclick="foundCar()">🚗 I Found My Car</button>
 </div>
+
+<!-- HISTORY -->
+<div id="historyPage" style="display:none">
+  <h1 style="font-size:34px">History</h1>
+  <div id="histList"></div>
+  <div id="histEmpty" class="empty"><div style="font-size:28px">🕒</div><h2 style="font-family:Georgia">No past parks yet</h2><p>After you tap "I Found My Car", the spot lands here so you can look back.</p></div>
+</div>
+</div>
+
 <div class="nav">
-  <button id="btnPark" class="active" onclick="showPage('park')">◉ Park</button>
-  <button id="btnHist" onclick="showPage('history')">🕒 History</button>
+  <button id="btnCar" class="active" onclick="showTab('car')">🚗 My Car</button>
+  <button id="btnHist" onclick="showTab('history')">🕒 History</button>
 </div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="modal">
+<div class="sheet">
+  <div style="display:flex;justify-content:space-between"><div><div class="label">YOUR SPOT</div><h1 style="font-size:28px;margin:4px 0">Edit parking details</h1></div><button class="edit" onclick="closeEdit()">✕</button></div>
+  <label style="font-family:Arial;font-size:12px;letter-spacing:1px;color:#777">BUILDING / MALL</label>
+  <input id="fBuilding" placeholder="e.g. SM Megamall, Building B">
+  <label style="font-family:Arial;font-size:12px;letter-spacing:1px;color:#777">FLOOR / LEVEL</label>
+  <div class="grid" id="levelGrid"></div>
+  <label style="font-family:Arial;font-size:12px;letter-spacing:1px;color:#777">SLOT NUMBER</label>
+  <input id="fSlot" placeholder="E.G. C-142">
+  <label style="font-family:Arial;font-size:12px;letter-spacing:1px;color:#777">PHOTO</label>
+  <div class="photo-row">
+    <label>📷<br>Take photo<input type="file" accept="image/*" capture="environment" hidden onchange="previewPhoto(this)"></label>
+    <label>🖼️<br>From gallery<input type="file" accept="image/*" hidden onchange="previewPhoto(this)"></label>
+  </div>
+  <p style="font-size:12px">Snap the pillar sign or nearest landmark.</p>
+  <label style="font-family:Arial;font-size:12px;letter-spacing:1px;color:#777">NOTE</label>
+  <textarea id="fNote" placeholder="e.g. Near the elevator entrance, beside pillar 4C"></textarea>
+  <button class="btn btn-gray" onclick="saveDetails()">Save details</button>
+</div>
+</div>
+
 <script>
-  let spots = JSON.parse(localStorage.getItem('parksave_spots')||'[]');
-  function saveSpot(){
-    let level=document.getElementById('level').value||'—';
-    let slot=document.getElementById('slot').value||'—';
-    let time=new Date().toLocaleString('en-PH',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-    spots.unshift({level,slot,time});
-    localStorage.setItem('parksave_spots',JSON.stringify(spots));
-    document.getElementById('msg').textContent='✅ Saved! Level '+level+' | Slot '+slot+' • '+time;
-    renderCurrent(); renderList();
-  }
-  function renderCurrent(){
-    let c=document.getElementById('current');
-    if(!spots.length){c.innerHTML='';return;}
-    let s=spots[0];
-    c.innerHTML=`<div class="card"><b>📍 Last Saved Spot</b><br><small>${s.time}</small><br><br>Level: <b>${s.level}</b> • Slot: <b>${s.slot}</b></div>`;
-  }
-  function renderList(){
-    let list=document.getElementById('list');
-    if(!spots.length){list.innerHTML='<p>No history yet. Save your first spot!</p>';return;}
-    list.innerHTML=spots.map((s,i)=>`<div class="card"><b>🅿️ Level ${s.level} • Slot ${s.slot}</b><br><small>${s.time}</small><br><button class="del" onclick="delSpot(${i})">Delete</button></div>`).join('');
-  }
-  function delSpot(i){spots.splice(i,1);localStorage.setItem('parksave_spots',JSON.stringify(spots));renderCurrent();renderList();}
-  function showPage(p){
-    document.getElementById('parkPage').style.display=p==='park'?'block':'none';
-    document.getElementById('historyPage').style.display=p==='history'?'block':'none';
-    document.getElementById('btnPark').className=p==='park'?'active':'';
-    document.getElementById('btnHist').className=p==='history'?'active':'';
-  }
-  renderCurrent(); renderList();
+let active = JSON.parse(localStorage.getItem('parksave_active')||'null');
+let history = JSON.parse(localStorage.getItem('parksave_history')||'[]');
+let selLevel = '';
+let startTime = active ? active.start : Date.now();
+let levels=['B3','B2','B1','LG','G','UG','2F','3F','4F','5F','6F','Roof'];
+let grid=document.getElementById('levelGrid');
+levels.forEach(l=>{let b=document.createElement('button');b.textContent=l;b.onclick=()=>{selLevel=l;document.querySelectorAll('#levelGrid button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};grid.appendChild(b)});
+
+function greet(){let h=new Date().getHours();document.getElementById('greet').textContent=h<12?'Magandang umaga!':h<18?'Magandang hapon!':'Magandang gabi!'} greet();
+
+function startPark(){
+  active={start:Date.now(),building:'',level:'',slot:'',note:'',photo:''};
+  localStorage.setItem('parksave_active',JSON.stringify(active));
+  startTime=active.start; render(); showTab('car');
+  openEdit();
+}
+function render(){
+  if(!active){document.getElementById('noCar').style.display='block';document.getElementById('myCar').style.display='none';return;}
+  document.getElementById('noCar').style.display='none';document.getElementById('myCar').style.display='block';
+  document.getElementById('showLevel').textContent=active.level||'+ Add level';
+  document.getElementById('showSlot').textContent=active.slot||'+ Add slot';
+  let d=new Date(active.start);
+  document.getElementById('sinceText').textContent='Since '+d.toLocaleTimeString('en-PH',{hour:'numeric',minute:'2-digit'})+' · Today'+(active.building?' · '+active.building:'');
+  document.getElementById('noteShow').textContent=active.note?('📝 '+active.note):'';
+  let img=document.getElementById('photoShow');
+  if(active.photo){img.src=active.photo;img.style.display='block'}else img.style.display='none';
+  renderHistory();
+}
+function tick(){
+  if(!active) return;
+  let s=Math.floor((Date.now()-active.start)/1000);
+  document.getElementById('tH').textContent=String(Math.floor(s/3600)).padStart(2,'0');
+  document.getElementById('tM').textContent=String(Math.floor(s%3600/60)).padStart(2,'0');
+  document.getElementById('tS').textContent=String(s%60).padStart(2,'0');
+}
+setInterval(tick,1000);
+function openEdit(){
+  if(active){document.getElementById('fBuilding').value=active.building||'';document.getElementById('fSlot').value=active.slot||'';document.getElementById('fNote').value=active.note||'';selLevel=active.level||'';}
+  document.getElementById('modal').classList.add('open');
+}
+function closeEdit(){document.getElementById('modal').classList.remove('open')}
+function previewPhoto(inp){
+  let f=inp.files[0]; if(!f) return;
+  let r=new FileReader(); r.onload=e=>{if(active){active.photo=e.target.result;}}; r.readAsDataURL(f);
+}
+function saveDetails(){
+  if(!active) return;
+  active.building=document.getElementById('fBuilding').value;
+  active.level=selLevel;
+  active.slot=document.getElementById('fSlot').value;
+  active.note=document.getElementById('fNote').value;
+  localStorage.setItem('parksave_active',JSON.stringify(active));
+  closeEdit(); render();
+  let t=document.getElementById('toast'); t.style.display='block'; setTimeout(()=>t.style.display='none',2000);
+}
+function findCar(){
+  let msg='Your car is at '+(active.building||'saved location')+' Level '+(active.level||'?')+' Slot '+(active.slot||'?');
+  alert(msg);
+  if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{
+    window.open('https://www.google.com/maps?q='+p.coords.latitude+','+p.coords.longitude,'_blank');
+  });}
+}
+function foundCar(){
+  if(!active) return;
+  history.unshift({...active,ended:Date.now()});
+  localStorage.setItem('parksave_history',JSON.stringify(history));
+  localStorage.removeItem('parksave_active'); active=null; render(); showTab('history');
+}
+function renderHistory(){
+  let list=document.getElementById('histList');
+  document.getElementById('histEmpty').style.display=history.length?'none':'block';
+  list.innerHTML=history.map(h=>`<div class="hist-card"><b>🅿️ ${h.building||'Parking'} • Level ${h.level||'?'} • Slot ${h.slot||'?'}</b><br><small>${new Date(h.start).toLocaleString('en-PH')} — ${h.note||''}</small>${h.photo?`<br><img src="${h.photo}" style="width:100%;border-radius:10px;margin-top:8px">`:''}</div>`).join('');
+}
+function showTab(t){
+  document.getElementById('historyPage').style.display=t==='history'?'block':'none';
+  document.getElementById('noCar').style.display=(t==='car'&&!active)?'block':'none';
+  document.getElementById('myCar').style.display=(t==='car'&&active)?'block':'none';
+  document.getElementById('btnCar').className=t==='car'?'active':'';
+  document.getElementById('btnHist').className=t==='history'?'active':'';
+}
+render(); tick();
 </script>
 </body>
 </html>
