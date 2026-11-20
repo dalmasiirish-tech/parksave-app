@@ -6,33 +6,31 @@
 <title>ParkSave — Where did I park?</title>
 <style>
   *{box-sizing:border-box}
-  body{margin:0;background:#F6F1E7;font-family:Georgia,serif;color:#2b2b2b;padding-bottom:100px}
-  .top{display:flex;justify-content:space-between;align-items:center;padding:18px 20px}
-  .top b{font-size:22px}
-  .install{border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px}
-  .hero{max-width:520px;margin:10px auto;padding:0 22px}
-  .hero h1{font-size:42px;line-height:1.05;margin:10px 0;font-weight:400}
-  .hero h1 i{font-family:Georgia,serif}
-  .hero p{font-family:Arial,sans-serif;color:#666;line-height:1.5;font-size:15px;max-width:340px}
-  .circle-wrap{display:flex;justify-content:center;margin:28px 0}
-  .big-btn{width:230px;height:230px;border-radius:50%;background:#F2D8D0;border:none;cursor:pointer;box-shadow:0 10px 0 #E8CFC8, 0 15px 25px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-  .big-btn:active{transform:translateY(5px);box-shadow:0 5px 0 #E8CFC8}
-  .big-btn span{font-size:48px;background:#2b2b2b;color:white;width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center}
-  .big-btn b{font-size:22px;line-height:1.1}
-  .inputs{max-width:520px;margin:0 auto;padding:0 22px;display:flex;gap:10px}
-  .inputs input{flex:1;padding:13px;border:1px solid #ddd;border-radius:12px;background:white;font-family:Arial}
+  body{margin:0;background:#F6F1E7;font-family:Georgia,serif;color:#2b2b2b}
+  .top{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;max-width:600px;margin:0 auto}
+  .top b{font-size:24px}
+  .install{border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px;font-family:Arial}
+  .hero{max-width:520px;margin:10px auto;padding:0 22px;padding-bottom:120px}
+  .hero h1{font-size:44px;line-height:1.05;margin:15px 0;font-weight:400}
+  .hero p{font-family:Arial;color:#666;line-height:1.5;font-size:15px}
+  .circle-wrap{display:flex;justify-content:center;margin:30px 0}
+  .big-btn{width:240px;height:240px;border-radius:50%;background:#F2D8D0;border:none;cursor:pointer;box-shadow:0 12px 0 #E8CFC8, 0 18px 25px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  .big-btn:active{transform:translateY(6px)}
+  .big-btn span{font-size:48px;background:#2b2b2b;color:white;width:62px;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:Arial;font-weight:bold}
+  .big-btn b{font-size:23px;line-height:1.1}
+  .inputs{display:flex;gap:10px}
+  .inputs input{flex:1;padding:14px;border:1px solid #ddd;border-radius:12px;background:white;font-family:Arial}
   .card{background:white;border-radius:16px;padding:16px;margin:14px 0;font-family:Arial}
   .card small{color:#888}
   .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#4A4A52;border-radius:30px;padding:6px;display:flex;gap:5px;width:340px;max-width:90%}
-  .nav button{flex:1;border:none;padding:12px;border-radius:25px;cursor:pointer;font-weight:bold;background:transparent;color:white}
+  .nav button{flex:1;border:none;padding:13px;border-radius:25px;cursor:pointer;font-weight:bold;background:transparent;color:white;font-family:Arial}
   .nav button.active{background:white;color:#333}
   #msg{text-align:center;font-family:Arial;font-weight:bold;color:#2b7a2b}
-  .del{background:#ff5252;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;margin-top:8px}
+  .del{background:#ff5252;color:white;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;margin-top:8px}
 </style>
 </head>
 <body>
 <div class="top"><b>ParkSave</b><div class="install">⤓ Install</div></div>
-
 <div class="hero" id="parkPage">
   <h1>Just parked?<br><i>One tap, tapos na.</i></h1>
   <p>We'll lock in your location and time. Add the level, slot, or a photo of the pillar if you like.</p>
@@ -46,47 +44,43 @@
   <p id="msg"></p>
   <div id="current"></div>
 </div>
-
 <div class="hero" id="historyPage" style="display:none">
   <h1 style="font-size:32px">History</h1>
   <p>Your saved parking spots.</p>
   <div id="list"></div>
 </div>
-
 <div class="nav">
   <button id="btnPark" class="active" onclick="showPage('park')">◉ Park</button>
   <button id="btnHist" onclick="showPage('history')">🕒 History</button>
 </div>
-
 <script>
   let spots = JSON.parse(localStorage.getItem('parksave_spots')||'[]');
   function saveSpot(){
-    let level = document.getElementById('level').value || '—';
-    let slot = document.getElementById('slot').value || '—';
-    let now = new Date();
-    let time = now.toLocaleString('en-PH',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    let level=document.getElementById('level').value||'—';
+    let slot=document.getElementById('slot').value||'—';
+    let time=new Date().toLocaleString('en-PH',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
     spots.unshift({level,slot,time});
     localStorage.setItem('parksave_spots',JSON.stringify(spots));
-    document.getElementById('msg').textContent = '✅ Saved! Level '+level+' | Slot '+slot+' • '+time;
+    document.getElementById('msg').textContent='✅ Saved! Level '+level+' | Slot '+slot+' • '+time;
     renderCurrent(); renderList();
   }
   function renderCurrent(){
-    let c = document.getElementById('current');
+    let c=document.getElementById('current');
     if(!spots.length){c.innerHTML='';return;}
-    let s = spots[0];
-    c.innerHTML = <div class="card"><b>📍 Last Saved Spot</b><br><small>${s.time}</small><br><br>Level: <b>${s.level}</b> • Slot: <b>${s.slot}</b></div>;
+    let s=spots[0];
+    c.innerHTML=`<div class="card"><b>📍 Last Saved Spot</b><br><small>${s.time}</small><br><br>Level: <b>${s.level}</b> • Slot: <b>${s.slot}</b></div>`;
   }
   function renderList(){
-    let list = document.getElementById('list');
+    let list=document.getElementById('list');
     if(!spots.length){list.innerHTML='<p>No history yet. Save your first spot!</p>';return;}
-    list.innerHTML = spots.map((s,i)=>`<div class="card"><b>🅿️ Level ${s.level} • Slot ${s.slot}</b><br><small>${s.time}</small><br><button class="del" onclick="delSpot(${i})">Delete</button></div>`).join('');
+    list.innerHTML=spots.map((s,i)=>`<div class="card"><b>🅿️ Level ${s.level} • Slot ${s.slot}</b><br><small>${s.time}</small><br><button class="del" onclick="delSpot(${i})">Delete</button></div>`).join('');
   }
-  function delSpot(i){ spots.splice(i,1); localStorage.setItem('parksave_spots',JSON.stringify(spots)); renderCurrent(); renderList(); }
+  function delSpot(i){spots.splice(i,1);localStorage.setItem('parksave_spots',JSON.stringify(spots));renderCurrent();renderList();}
   function showPage(p){
-    document.getElementById('parkPage').style.display = p==='park'?'block':'none';
-    document.getElementById('historyPage').style.display = p==='history'?'block':'none';
-    document.getElementById('btnPark').className = p==='park'?'active':'';
-    document.getElementById('btnHist').className = p==='history'?'active':'';
+    document.getElementById('parkPage').style.display=p==='park'?'block':'none';
+    document.getElementById('historyPage').style.display=p==='history'?'block':'none';
+    document.getElementById('btnPark').className=p==='park'?'active':'';
+    document.getElementById('btnHist').className=p==='history'?'active':'';
   }
   renderCurrent(); renderList();
 </script>
