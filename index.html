@@ -3,91 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ParkSave - Parking Reservation</title>
+<title>ParkSave — Where did I park?</title>
 <style>
-  *{box-sizing:border-box;font-family:Arial,sans-serif}
-  body{margin:0;background:#e0f7fa;color:#222}
-  header{background:#0097a7;color:white;padding:25px;text-align:center}
-  header h1{margin:0;font-size:32px}
-  .container{max-width:600px;margin:20px auto;padding:15px}
-  .card{background:white;padding:20px;border-radius:15px;box-shadow:0 2px 10px rgba(0,0,0,.1);margin-bottom:20px}
-  label{display:block;margin:12px 0 5px;font-weight:bold}
-  input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px}
-  .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
-  .slot{padding:15px;border:2px solid #0097a7;border-radius:10px;text-align:center;cursor:pointer;font-weight:bold;background:#f0fafa}
-  .slot.selected{background:#0097a7;color:white}
-  .slot.booked{background:#ccc;color:#777;border-color:#aaa;cursor:not-allowed;text-decoration:line-through}
-  button{width:100%;padding:14px;background:#0097a7;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:15px;cursor:pointer}
-  .booking{background:#f7f7f7;padding:12px;border-radius:10px;margin-top:10px}
-  .back{display:block;text-align:center;margin-top:15px;color:#0097a7}
+  *{box-sizing:border-box}
+  body{margin:0;background:#F6F1E7;font-family:Georgia,serif;color:#2b2b2b;padding-bottom:100px}
+  .top{display:flex;justify-content:space-between;align-items:center;padding:18px 20px}
+  .top b{font-size:22px}
+  .install{border:1px solid #333;border-radius:20px;padding:6px 14px;font-size:13px}
+  .hero{max-width:520px;margin:10px auto;padding:0 22px}
+  .hero h1{font-size:42px;line-height:1.05;margin:10px 0;font-weight:400}
+  .hero h1 i{font-family:Georgia,serif}
+  .hero p{font-family:Arial,sans-serif;color:#666;line-height:1.5;font-size:15px;max-width:340px}
+  .circle-wrap{display:flex;justify-content:center;margin:28px 0}
+  .big-btn{width:230px;height:230px;border-radius:50%;background:#F2D8D0;border:none;cursor:pointer;box-shadow:0 10px 0 #E8CFC8, 0 15px 25px rgba(0,0,0,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+  .big-btn:active{transform:translateY(5px);box-shadow:0 5px 0 #E8CFC8}
+  .big-btn span{font-size:48px;background:#2b2b2b;color:white;width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+  .big-btn b{font-size:22px;line-height:1.1}
+  .inputs{max-width:520px;margin:0 auto;padding:0 22px;display:flex;gap:10px}
+  .inputs input{flex:1;padding:13px;border:1px solid #ddd;border-radius:12px;background:white;font-family:Arial}
+  .card{background:white;border-radius:16px;padding:16px;margin:14px 0;font-family:Arial}
+  .card small{color:#888}
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#4A4A52;border-radius:30px;padding:6px;display:flex;gap:5px;width:340px;max-width:90%}
+  .nav button{flex:1;border:none;padding:12px;border-radius:25px;cursor:pointer;font-weight:bold;background:transparent;color:white}
+  .nav button.active{background:white;color:#333}
+  #msg{text-align:center;font-family:Arial;font-weight:bold;color:#2b7a2b}
+  .del{background:#ff5252;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;margin-top:8px}
 </style>
 </head>
 <body>
-<header>
-  <h1>🅿️ ParkSave</h1>
-  <p>Simple Parking Reservation</p>
-</header>
-<div class="container">
-  <div class="card">
-    <h2>Book a Parking Slot</h2>
-    <label>Your Name</label>
-    <input id="name" placeholder="e.g. Irish Dalmasi">
-    <label>Plate Number</label>
-    <input id="plate" placeholder="e.g. ABC-1234">
-    <label>Date</label>
-    <input type="date" id="date">
-    <label>Time</label>
-    <select id="time">
-      <option>8:00 AM - 10:00 AM</option>
-      <option>10:00 AM - 12:00 PM</option>
-      <option>1:00 PM - 3:00 PM</option>
-      <option>3:00 PM - 5:00 PM</option>
-    </select>
-    <label>Choose Slot</label>
-    <div class="slots" id="slots"></div>
-    <button onclick="book()">Book Now</button>
-    <p id="msg" style="text-align:center;font-weight:bold"></p>
+<div class="top"><b>ParkSave</b><div class="install">⤓ Install</div></div>
+
+<div class="hero" id="parkPage">
+  <h1>Just parked?<br><i>One tap, tapos na.</i></h1>
+  <p>We'll lock in your location and time. Add the level, slot, or a photo of the pillar if you like.</p>
+  <div class="circle-wrap">
+    <button class="big-btn" onclick="saveSpot()"><span>P</span><b>Save My<br>Parking Spot</b></button>
   </div>
-  <div class="card">
-    <h2>My Bookings</h2>
-    <div id="list"><p>No bookings yet.</p></div>
+  <div class="inputs">
+    <input id="level" placeholder="Level e.g. B2">
+    <input id="slot" placeholder="Slot e.g. A-12">
   </div>
-  <a class="back" href="https://dalmasiirish-tech.github.io/">← Back to Portfolio</a>
+  <p id="msg"></p>
+  <div id="current"></div>
 </div>
+
+<div class="hero" id="historyPage" style="display:none">
+  <h1 style="font-size:32px">History</h1>
+  <p>Your saved parking spots.</p>
+  <div id="list"></div>
+</div>
+
+<div class="nav">
+  <button id="btnPark" class="active" onclick="showPage('park')">◉ Park</button>
+  <button id="btnHist" onclick="showPage('history')">🕒 History</button>
+</div>
+
 <script>
-  let selected = null;
-  let bookings = JSON.parse(localStorage.getItem('parksave') || '[]');
-  function renderSlots(){
-    let box = document.getElementById('slots');
-    box.innerHTML = '';
-    for(let i=1;i<=8;i++){
-      let isBooked = bookings.some(b=>b.slot==='Slot '+i);
-      let div = document.createElement('div');
-      div.className = 'slot' + (isBooked ? ' booked' : '') + (selected==='Slot '+i ? ' selected':'');
-      div.textContent = 'Slot '+i;
-      if(!isBooked){ div.onclick = ()=>{ selected='Slot '+i; renderSlots(); }; }
-      box.appendChild(div);
-    }
+  let spots = JSON.parse(localStorage.getItem('parksave_spots')||'[]');
+  function saveSpot(){
+    let level = document.getElementById('level').value || '—';
+    let slot = document.getElementById('slot').value || '—';
+    let now = new Date();
+    let time = now.toLocaleString('en-PH',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    spots.unshift({level,slot,time});
+    localStorage.setItem('parksave_spots',JSON.stringify(spots));
+    document.getElementById('msg').textContent = '✅ Saved! Level '+level+' | Slot '+slot+' • '+time;
+    renderCurrent(); renderList();
+  }
+  function renderCurrent(){
+    let c = document.getElementById('current');
+    if(!spots.length){c.innerHTML='';return;}
+    let s = spots[0];
+    c.innerHTML = <div class="card"><b>📍 Last Saved Spot</b><br><small>${s.time}</small><br><br>Level: <b>${s.level}</b> • Slot: <b>${s.slot}</b></div>;
   }
   function renderList(){
     let list = document.getElementById('list');
-    if(bookings.length===0){ list.innerHTML='<p>No bookings yet.</p>'; return; }
-    list.innerHTML = bookings.map((b,i)=>`<div class="booking"><b>${b.slot}</b> - ${b.name} (${b.plate})<br>${b.date} | ${b.time}<br><button onclick="cancelBooking(${i})" style="background:#ff5252;margin-top:8px;padding:8px">Cancel</button></div>`).join('');
+    if(!spots.length){list.innerHTML='<p>No history yet. Save your first spot!</p>';return;}
+    list.innerHTML = spots.map((s,i)=>`<div class="card"><b>🅿️ Level ${s.level} • Slot ${s.slot}</b><br><small>${s.time}</small><br><button class="del" onclick="delSpot(${i})">Delete</button></div>`).join('');
   }
-  function book(){
-    let name=document.getElementById('name').value;
-    let plate=document.getElementById('plate').value;
-    let date=document.getElementById('date').value;
-    let time=document.getElementById('time').value;
-    if(!name||!plate||!date||!selected){ document.getElementById('msg').textContent='Please fill all fields and choose a slot!'; document.getElementById('msg').style.color='red'; return; }
-    bookings.push({name,plate,date,time,slot:selected});
-    localStorage.setItem('parksave',JSON.stringify(bookings));
-    selected=null; renderSlots(); renderList();
-    document.getElementById('msg').textContent='✅ Booked! See you at '+bookings[bookings.length-1].slot;
-    document.getElementById('msg').style.color='green';
+  function delSpot(i){ spots.splice(i,1); localStorage.setItem('parksave_spots',JSON.stringify(spots)); renderCurrent(); renderList(); }
+  function showPage(p){
+    document.getElementById('parkPage').style.display = p==='park'?'block':'none';
+    document.getElementById('historyPage').style.display = p==='history'?'block':'none';
+    document.getElementById('btnPark').className = p==='park'?'active':'';
+    document.getElementById('btnHist').className = p==='history'?'active':'';
   }
-  function cancelBooking(i){ bookings.splice(i,1); localStorage.setItem('parksave',JSON.stringify(bookings)); renderSlots(); renderList(); }
-  renderSlots(); renderList();
+  renderCurrent(); renderList();
 </script>
 </body>
 </html>
